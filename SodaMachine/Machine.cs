@@ -9,15 +9,12 @@ namespace SodaMachine
         //member variables
         public List<Coin> register;
         public List<Can> inventory;
-        //do these need to be public?
-
         public List<Coin> receivedPayment;
 
         Quarter quarter;
         Dime dime;
         Nickel nickel;
         Penny penny;
-        //Do these need to be public?
 
         OrangeSoda orangeSoda;
         RootBeer rootBeer;
@@ -31,7 +28,6 @@ namespace SodaMachine
             register = new List<Coin>();
             InitializeRegister();
             receivedPayment = new List<Coin>();
-            DisplayInventory();
         }
         public void InitializeInventory()
         {
@@ -107,11 +103,50 @@ namespace SodaMachine
                 }
             }
             Console.WriteLine("The current inventory is:");
-            Console.WriteLine($"Cola: {colaCount}");
-            Console.WriteLine($"Root Beer: {rootBeerCount}");
-            Console.WriteLine($"Orange Soda: {orangeSodaCount}");
+            Console.WriteLine($"1: {colaCount} cans of Cola (${cola.Cost} per can)");
+            Console.WriteLine($"2. {rootBeerCount} cans of Root Beer (${rootBeer.Cost} per can)");
+            Console.WriteLine($"3. {orangeSodaCount} cans of Orange Soda (${orangeSoda.Cost} per can)");
+        }
+        public double ComputeRegisterValue()
+        {
+            double totalRegisterValue = 0;
+            foreach(Coin coin in register)
+            {
+                totalRegisterValue += coin.Value;
+            }
+            return totalRegisterValue;
         }
 
+       
+        public void InsertPayment(List<Coin> customerPayment)
+        {
+            receivedPayment = customerPayment;
+        }
+        public void DispenseSoda()
+        {
+            //how can we translate a specific user input to a type of soda can?
+        }
+        public void SelectSoda()
+        {
+            switch (Interface.GetUserInputInt("Please enter the number of your soda choice!"))
+            {
+                case 1:
+                    Console.WriteLine("Cola selected.");
+                    break;
 
+                case 2:
+                    Console.WriteLine("Root Beer selected.");
+                    break;
+
+                case 3:
+                    Console.WriteLine("Orange Soda selected");
+                    break;
+
+                default:
+                    Console.WriteLine("Not a valid soda selection. Please try again!");
+                    SelectSoda();
+                    break;
+            }
+        }
     }
 }

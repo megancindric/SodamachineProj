@@ -8,7 +8,6 @@ namespace SodaMachine
     class Simulation
     {
         //member variables
-        //Will have a SodaMachine and a Customer object
         public Machine sodaMachine;
         public Customer customer;
 
@@ -17,28 +16,24 @@ namespace SodaMachine
         {
             sodaMachine = new Machine();
             customer = new Customer();
+            Interface.DisplayWelcome();
+            sodaMachine.DisplayInventory();
+            sodaMachine.SelectSoda();
         }
 
         //member methods
-        public void InsertPayment(List<Coin> customerPayment)
-        {
-                sodaMachine.receivedPayment = customerPayment;
-        }
-       
         public void ReturnPayment(List<Coin> receivedPayment)
         {
-            customer.wallet.coins = receivedPayment;
-        }
-        
-        public void InsufficientFunds()
-        {
-            Interface.InsufficientMoney();
-            ReturnPayment(sodaMachine.receivedPayment);
+
         }
 
         public void InsufficientInventory()
         {
             Interface.InsufficientInventory();
+            ReturnPayment(sodaMachine.receivedPayment);
+        }
+        public void InsufficientMoneyInMachine()
+        {
             ReturnPayment(sodaMachine.receivedPayment);
         }
         public void UnderPayment()
@@ -56,16 +51,38 @@ namespace SodaMachine
             return totalPayment;
         }
 
-        public void AssessPayment(double totalPayment, Can colaSelection)
+        public void AssessPayment(Machine sodaMachine, Customer customer, Can canSelection)
         {
-            if (totalPayment < colaSelection.Cost)
+            double totalPayment = ComputeTotalPayment(customer.payment);
+
+            if (totalPayment < canSelection.Cost)
             {
                 UnderPayment();
             }
-           
+            else if (!sodaMachine.inventory.Contains(canSelection))
+            {
+                InsufficientInventory();
+            }
+            else if (totalPayment - canSelection.Cost > sodaMachine.ComputeRegisterValue())
+            {
+                InsufficientMoneyInMachine();
+            }
+            else if (totalPayment == canSelection.Cost)
+            {
+                ExactPayment();
+            }
+            else if (totalPayment > canSelection.Cost)
+            {
+                OverPayment();
+            }
         }
 
         public void OverPayment()
+        {
+
+        }
+        
+        public void ExactPayment()
         {
 
         }

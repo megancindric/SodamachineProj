@@ -11,35 +11,18 @@ namespace SodaMachine
             Console.WriteLine($"The price of your soda is");
         }
 
-        public static void SelectSoda()
+       public static string GetUserInput(string prompt)
         {
-            Console.WriteLine("Please select your soda");
-            String sodaSelection = Console.ReadLine();
-            switch (sodaSelection)
-            {
-                case "Cola":
-                    Console.WriteLine("Cola selected.");
-                    break;
-
-                case "Root Beer":
-                        Console.WriteLine("Root Beer selected.");
-                        break;
-
-                case "Orange Soda":
-                        Console.WriteLine("Orange Soda selected");
-                        break;
-
-                default:
-                        Console.WriteLine("Not a valid soda selection. Please try again!");
-                        SelectSoda();
-                        break;
-
-            }
+            Console.WriteLine(prompt);
+            string userInput = Console.ReadLine();
+            return userInput;
         }
 
-        public static void SelectCoinPayment()
+        public static int GetUserInputInt(string prompt)
         {
-
+            Console.WriteLine(prompt);
+            int userInput = Int32.Parse(Console.ReadLine());
+            return userInput;
         }
 
         public static void DisplayWelcome()

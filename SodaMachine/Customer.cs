@@ -10,7 +10,6 @@ namespace SodaMachine
         public Wallet wallet;
         public Backpack backpack;
         public List<Coin> payment;
-            //Will have a Wallet (with money) and Backpack(with a list of Cans)
 
         //constructor
         public Customer()
