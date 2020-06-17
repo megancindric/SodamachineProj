@@ -126,26 +126,25 @@ namespace SodaMachine
         {
             //how can we translate a specific user input to a type of soda can?
         }
-        public void SelectSoda()
+        public Can SelectSoda()
         {
             switch (Interface.GetUserInputInt("Please enter the number of your soda choice!"))
             {
                 case 1:
                     Console.WriteLine("Cola selected.");
-                    break;
-
+                    return cola;
+                    
                 case 2:
                     Console.WriteLine("Root Beer selected.");
-                    break;
+                    return rootBeer;
 
                 case 3:
                     Console.WriteLine("Orange Soda selected");
-                    break;
+                    return orangeSoda;
 
                 default:
                     Console.WriteLine("Not a valid soda selection. Please try again!");
-                    SelectSoda();
-                    break;
+                    return SelectSoda();
             }
         }
     }
