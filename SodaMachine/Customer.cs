@@ -32,6 +32,7 @@ namespace SodaMachine
             else
             {
                 Console.WriteLine($"Whoops!  Looks like you're out of {coin.Name}.  Try again!");
+                //Will be moved to interface class
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace SodaMachine
 {
@@ -23,11 +24,12 @@ namespace SodaMachine
         {
                 sodaMachine.receivedPayment = customerPayment;
         }
-
+       
         public void ReturnPayment(List<Coin> receivedPayment)
         {
             customer.wallet.coins = receivedPayment;
         }
+        
         public void InsufficientFunds()
         {
             Interface.InsufficientMoney();
@@ -37,6 +39,11 @@ namespace SodaMachine
         public void InsufficientInventory()
         {
             Interface.InsufficientInventory();
+            ReturnPayment(sodaMachine.receivedPayment);
+        }
+        public void UnderPayment()
+        {
+            Interface.InsufficientMoney();
             ReturnPayment(sodaMachine.receivedPayment);
         }
         public double ComputeTotalPayment(List<Coin> coinList)
@@ -51,7 +58,11 @@ namespace SodaMachine
 
         public void AssessPayment(double totalPayment, Can colaSelection)
         {
-
+            if (totalPayment < colaSelection.Cost)
+            {
+                UnderPayment();
+            }
+           
         }
 
         public void OverPayment()
@@ -59,10 +70,6 @@ namespace SodaMachine
 
         }
 
-        public void UnderPayment()
-        {
-            Interface.InsufficientMoney();
-            ReturnPayment(sodaMachine.receivedPayment);
-        }
+       
     }
 }

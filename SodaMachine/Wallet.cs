@@ -9,26 +9,73 @@ namespace SodaMachine
         //member variables
         public List<Coin> coins;
         public Card card;
-        //Will have a list of coins and a Card
+        Nickel nickel;
+        Penny penny;
+        Dime dime;
+        Quarter quarter;
         //constructor
         public Wallet()
         {
             card = new Card();
             coins = new List<Coin>();
-            //Do we want to assign pre-determined coin amount?
-            //Will be $5 in mixed change - let's do:
-                //12 Quarters (3.00)
-                //13 Dimes ($1.30)
-                //12 Nickels (0.60)
-                //10 Pennies (0.10)
+            AddCoins();
+            DisplayWallet();
         }
-
+        public void AddCoins()
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                quarter = new Quarter();
+                coins.Add(quarter);
+            }
+            for (int i = 0; i < 13; i++)
+            {
+                dime = new Dime();
+                coins.Add(dime);
+            }
+            for (int i = 0; i < 12; i++)
+            {
+                nickel = new Nickel();
+                coins.Add(nickel);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                penny = new Penny();
+                coins.Add(penny);
+            }
+        }
         //member methods
         public void DisplayWallet()
         {
-            //Will log value of card (can do method for this) as well as number of each type of coin
-            Console.WriteLine("The current money in your wallet is:");
+            int quarterCount = 0;
+            int dimeCount = 0;
+            int nickelCount = 0;
+            int pennyCount = 0;
 
+            foreach (Coin coin in coins)
+            {
+                if (coin.Name == "Quarter")
+                {
+                    quarterCount++;
+                }
+                else if (coin.Name == "Dime")
+                {
+                    dimeCount++;
+                }
+                else if (coin.Name == "Nickel")
+                {
+                    nickelCount++;
+                }
+                else if (coin.Name == "Penny")
+                {
+                    pennyCount++;
+                }
+            }
+            Console.WriteLine("The current money in your wallet is:");
+            Console.WriteLine($"Quarters: {quarterCount}");
+            Console.WriteLine($"Dimes: {dimeCount}");
+            Console.WriteLine($"Nickels: {nickelCount}");
+            Console.WriteLine($"Pennies: {pennyCount}");
         }
        
     }

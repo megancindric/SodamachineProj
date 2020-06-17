@@ -4,7 +4,18 @@ using System.Text;
 
 namespace SodaMachine
 {
-    class Cola
+    class Cola : Can
     {
+        //member variables
+
+        //constructor
+        public Cola()
+        {
+            name = "Cola";
+            cost = 0.35;
+            
+        }
+
+        //member methods
     }
 }

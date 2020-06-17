@@ -4,7 +4,17 @@ using System.Text;
 
 namespace SodaMachine
 {
-    class Quarter
+    class Quarter : Coin
     {
+        //member variables
+
+        //constructor
+        public Quarter()
+        {
+            name = "Quarter";
+            value = 0.25;
+        }
+
+        //member methods
     }
 }
