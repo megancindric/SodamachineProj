@@ -74,14 +74,9 @@ namespace SodaMachine
             }
         }
 
-        //member methods       
-        public void AddPayment(List<Coin> receivedPayment)
-        {
-            foreach (Coin coin in receivedPayment)
-            {
-                register.Add(coin);
-            }
-        }
+        //member methods   
+
+       
         public void DisplayInventory()
         {
             int colaCount = 0;
@@ -120,12 +115,12 @@ namespace SodaMachine
         {
             receivedPayment = customerPayment;
         }
-        public void DispenseSoda(Customer customer)
+        public void AddPayment(List<Coin> receivedPayment)
         {
-            Can canSelection = SelectSoda();
-            inventory.Remove(canSelection);
-            customer.backpack.AddCan(canSelection);
-            //could add success message here
+            foreach (Coin coin in receivedPayment)
+            {
+                register.Add(coin);
+            }
         }
         public Can SelectSoda()
         {
@@ -155,30 +150,30 @@ namespace SodaMachine
 
             while (changeToDispense > 0)
             {
-                if (changeToDispense / 0.25 > 1)
+                if ((changeToDispense / 0.25 > 1) && (register.Contains(quarter)))
                 {
-                    quarter = new Quarter();
+                    register.Remove(quarter);
                     changeList.Add(quarter);
                     changeToDispense -= 0.25;
                 }
 
-                else if (changeToDispense / 0.10 > 1)
+                else if ((changeToDispense / 0.10 > 1) && (register.Contains(dime)))
                 {
-                    dime = new Dime();
+                    register.Remove(dime);
                     changeList.Add(dime);
                     changeToDispense -= 0.10;
                 }
 
-                else if (changeToDispense / 0.05 > 1)
+                else if ((changeToDispense / 0.05 > 1) && (register.Contains(nickel)))
                 {
-                    nickel = new Nickel();
+                    register.Remove(nickel);
                     changeList.Add(nickel);
                     changeToDispense -= 0.05;
                 }
 
-                else if (changeToDispense / 0.01 > 1)
+                else if ((changeToDispense / 0.01 > 1) && (register.Contains(penny)))
                 {
-                    penny = new Penny();
+                    register.Remove(penny);
                     changeList.Add(penny);
                     changeToDispense -= 0.01;
                 }
