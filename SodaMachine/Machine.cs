@@ -98,9 +98,9 @@ namespace SodaMachine
                 }
             }
             Interface.DisplayMessage("The current inventory is:");
-            Interface.DisplayMessage($"1: {colaCount} cans of Cola (${cola.Cost} per can)");
-            Interface.DisplayMessage($"2. {rootBeerCount} cans of Root Beer (${rootBeer.Cost} per can)");
-            Interface.DisplayMessage($"3. {orangeSodaCount} cans of Orange Soda (${orangeSoda.Cost} per can)");
+            Interface.DisplayMessage($"1: {colaCount} cans of Cola.");
+            Interface.DisplayMessage($"2. {rootBeerCount} cans of Root Beer");
+            Interface.DisplayMessage($"3. {orangeSodaCount} cans of Orange Soda");
         }
         public double ComputeRegisterValue()
         {
@@ -122,8 +122,10 @@ namespace SodaMachine
                 register.Add(coin);
             }
         }
+        
         public Can SelectSoda()
         {
+            Interface.DisplaySodaOptions();
             switch (Interface.GetUserInputInt("Please enter the number of your soda choice!"))
             {
                 case 1:
@@ -156,21 +158,18 @@ namespace SodaMachine
                     changeList.Add(quarter);
                     changeToDispense -= 0.25;
                 }
-
                 else if ((changeToDispense / 0.10 > 1) && (register.Contains(dime)))
                 {
                     register.Remove(dime);
                     changeList.Add(dime);
                     changeToDispense -= 0.10;
                 }
-
                 else if ((changeToDispense / 0.05 > 1) && (register.Contains(nickel)))
                 {
                     register.Remove(nickel);
                     changeList.Add(nickel);
                     changeToDispense -= 0.05;
                 }
-
                 else if ((changeToDispense / 0.01 > 1) && (register.Contains(penny)))
                 {
                     register.Remove(penny);

@@ -24,7 +24,8 @@ namespace SodaMachine
         }
 
         //member methods
-       
+        
+
         public void AssessPayment(Machine sodaMachine, Customer customer, Can canSelection)
         {
             double totalPayment = Math.ComputeTotalPayment(customer.payment);
@@ -111,6 +112,44 @@ namespace SodaMachine
             Interface.DisplayMessage("Insufficient money provided.  Soda will not be dispensed and funds will be returned.");
             customer.AddToWallet(sodaMachine.receivedPayment);
         }
+        public void SelectFromMenu()
+        {
+            Interface.DisplayMenuOptions();
+            int userInput = Interface.GetUserInputInt("Please enter your number selection");
 
+            switch (userInput)
+            {
+                case 1:
+                    {
+                        sodaMachine.SelectSoda();
+                        break;
+                    }
+                case 2:
+                    {
+                        sodaMachine.DisplayInventory();
+                        SelectFromMenu();
+                        break;
+                    }
+                case 3:
+                    {
+                        customer.wallet.DisplayWallet();
+                        SelectFromMenu();
+                        break;
+                    }
+
+                case 4:
+                    {
+                        Interface.DisplayMessage("Thanks for playing!");
+                        break;
+                    }
+
+                default :
+                    {
+                        Interface.InvalidSelection();
+                        SelectFromMenu();
+                        break;
+                    }
+            }
+        }
     }
 }
