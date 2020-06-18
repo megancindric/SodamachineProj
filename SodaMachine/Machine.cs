@@ -97,10 +97,10 @@ namespace SodaMachine
                     orangeSodaCount++;
                 }
             }
-            Console.WriteLine("The current inventory is:");
-            Console.WriteLine($"1: {colaCount} cans of Cola (${cola.Cost} per can)");
-            Console.WriteLine($"2. {rootBeerCount} cans of Root Beer (${rootBeer.Cost} per can)");
-            Console.WriteLine($"3. {orangeSodaCount} cans of Orange Soda (${orangeSoda.Cost} per can)");
+            Interface.DisplayMessage("The current inventory is:");
+            Interface.DisplayMessage($"1: {colaCount} cans of Cola (${cola.Cost} per can)");
+            Interface.DisplayMessage($"2. {rootBeerCount} cans of Root Beer (${rootBeer.Cost} per can)");
+            Interface.DisplayMessage($"3. {orangeSodaCount} cans of Orange Soda (${orangeSoda.Cost} per can)");
         }
         public double ComputeRegisterValue()
         {
@@ -127,19 +127,19 @@ namespace SodaMachine
             switch (Interface.GetUserInputInt("Please enter the number of your soda choice!"))
             {
                 case 1:
-                    Console.WriteLine("Cola selected.  Please insert money");
+                    Interface.DisplayMessage("Cola selected.  Please insert money");
                     return cola;
                     
                 case 2:
-                    Console.WriteLine("Root Beer selected.  Please insert money");
+                    Interface.DisplayMessage("Root Beer selected.  Please insert money");
                     return rootBeer;
 
                 case 3:
-                    Console.WriteLine("Orange Soda selected  Please insert money");
+                    Interface.DisplayMessage("Orange Soda selected  Please insert money");
                     return orangeSoda;
 
                 default:
-                    Console.WriteLine("Not a valid soda selection. Please try again!");
+                    Interface.InvalidSelection();
                     return SelectSoda();
             }
         }

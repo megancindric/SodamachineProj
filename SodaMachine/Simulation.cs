@@ -16,68 +16,101 @@ namespace SodaMachine
         {
             sodaMachine = new Machine();
             customer = new Customer();
-            Interface.DisplayWelcome();
+            Interface.DisplayMessage("Welcome to the soda machine!");
             sodaMachine.DisplayInventory();
-            sodaMachine.SelectSoda();
+            Can canSelection = sodaMachine.SelectSoda();
+            //Method for customer to add money to payment
+            AssessPayment(sodaMachine, customer, canSelection);
         }
 
         //member methods
-        public void ReturnPayment(List<Coin> receivedPayment)
-        {
-
-        }
-
-        public void InsufficientInventory()
-        {
-            Interface.InsufficientInventory();
-            ReturnPayment(sodaMachine.receivedPayment);
-        }
-        public void InsufficientMoneyInMachine()
-        {
-            ReturnPayment(sodaMachine.receivedPayment);
-        }
-        public void UnderPayment()
-        {
-            Interface.InsufficientMoney();
-            ReturnPayment(sodaMachine.receivedPayment);
-        }
-        
+       
         public void AssessPayment(Machine sodaMachine, Customer customer, Can canSelection)
         {
             double totalPayment = Math.ComputeTotalPayment(customer.payment);
+            double paymentChange = totalPayment - canSelection.Cost;
 
-            if (totalPayment < canSelection.Cost)
+            if (!SufficientPayment(totalPayment, canSelection))
             {
                 UnderPayment();
             }
-            else if (!sodaMachine.inventory.Contains(canSelection))
+            else if (!MachineHasCan(canSelection))
             {
                 InsufficientInventory();
             }
-            else if (totalPayment - canSelection.Cost > sodaMachine.ComputeRegisterValue())
+            else if (paymentChange > sodaMachine.ComputeRegisterValue())
             {
                 InsufficientMoneyInMachine();
             }
-            else if (totalPayment == canSelection.Cost)
+            else if (SufficientPayment(totalPayment, canSelection) && (MachineHasCan(canSelection)))
             {
-                ExactPayment();
+                if (NeedsChange(totalPayment, canSelection))
+                {
+                    double changeToDispense = totalPayment - canSelection.Cost;
+                    DispenseSoda();
+                    customer.AddToWallet(sodaMachine.ComputeChangeList(changeToDispense));
+                }
+                else
+                {
+                    DispenseSoda();
+                }
             }
-            else if (totalPayment > canSelection.Cost)
+        }
+        public bool MachineHasCan(Can canSelection)
+        {
+            if (sodaMachine.inventory.Contains(canSelection))
             {
-                OverPayment();
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
-
-        public void OverPayment()
+        public bool NeedsChange(Double totalPayment, Can canSelection)
         {
-
+            if (totalPayment == canSelection.Cost)
+            {
+                return false;
+            }
+            else
+            { 
+                return true;
+            }
         }
-        
-        public void ExactPayment()
+        public bool SufficientPayment(Double totalPayment, Can canSelection)
         {
-
+            if (totalPayment > canSelection.Cost)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void DispenseSoda()
+        {
+            Can canSelection = sodaMachine.SelectSoda();
+            sodaMachine.inventory.Remove(canSelection);
+            customer.backpack.AddCan(canSelection);
+            Interface.DisplayMessage($"Successfully purchased {canSelection.Name}!");
+        }
+        public void InsufficientInventory()
+        {
+            Interface.DisplayMessage("Insufficient soda in inventory.  Soda will not be dispensed and funds will be returned.");
+            customer.AddToWallet(sodaMachine.receivedPayment);
+        }
+        public void InsufficientMoneyInMachine()
+        {
+            Interface.DisplayMessage("Insufficient change in machine.  Soda will not be dispensed and funds will be returned.");
+            customer.AddToWallet(sodaMachine.receivedPayment);
+        }
+        public void UnderPayment()
+        {
+            Interface.DisplayMessage("Insufficient money provided.  Soda will not be dispensed and funds will be returned.");
+            customer.AddToWallet(sodaMachine.receivedPayment);
         }
 
-       
     }
 }
