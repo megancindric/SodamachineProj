@@ -20,7 +20,6 @@ namespace SodaMachine
 
             SelectFromMenu();
 
-            sodaMachine.InsertPayment(customer.payment);
             //will need to  do assesspayment method
             //then will need to do correct response;
         }
@@ -28,14 +27,14 @@ namespace SodaMachine
         public void PurchaseASoda()
         {
             Can customerSelection = SelectSoda();
+            customer.payment.Clear();
             //Will use this can for cost & soda machine methods
             customer.SelectPaymentOption();
             //Now have customer payment
             sodaMachine.AssessPayment(customer, customerSelection);
             //Will use cost of this can w/ payment methods
-
-            //If successful purchase...
-            customer.backpack.AddCan(customerSelection);
+            SelectFromMenu();
+            
         }
         public void SelectFromMenu()
         {

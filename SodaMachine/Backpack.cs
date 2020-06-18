@@ -23,6 +23,7 @@ namespace SodaMachine
 
         public void DisplayBackpack()
         {
+            Interface.DisplayMessage("Currently you have the following sodas in your backpack:");
             foreach(Can can in cans)
             {
                 Interface.DisplayMessage(can.Name);

@@ -44,7 +44,7 @@ namespace SodaMachine
         {
             Console.WriteLine($"Press 1 for Cola ($0.35 per can)");
             Console.WriteLine($"Press 2 for Root Beer ($0.60 per can)");
-            Console.WriteLine($"Press 3 for Orange Soda ($0.06 per can");
+            Console.WriteLine($"Press 3 for Orange Soda ($0.06 per can)");
         }
         public static void DisplayCoinOptions()
         {

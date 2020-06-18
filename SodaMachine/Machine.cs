@@ -10,7 +10,6 @@ namespace SodaMachine
         public List<Coin> register;
         public List<Can> inventory;
         public List<Coin> receivedPayment;
-        public Can customerSodaSelection;
 
         Quarter quarter;
         Dime dime;
@@ -108,17 +107,14 @@ namespace SodaMachine
             }
             return totalRegisterValue;
         }
-        public void InsertPayment(List<Coin> customerPayment)
-        {
-            //may be able to delete this and direct reference receivedPayment
-            receivedPayment = customerPayment;
-        }
+       
         public void AddPayment(List<Coin> receivedPayment)
         {
             foreach (Coin coin in receivedPayment)
             {
                 register.Add(coin);
             }
+            receivedPayment.Clear();
         }
 
         public List<Coin> ComputeChangeList(Double changeToDispense)
@@ -157,12 +153,11 @@ namespace SodaMachine
         }
         public void AssessPayment(Customer customer, Can canSelection)
         {
-            //move Math.ComputeTotalPayment to separate area --> let's first pass it to machine, then 
-            double totalPayment = Math.ComputeTotalPayment(customer.payment);
+            double totalPayment = Math.Round(Computations.ComputeTotalPayment(customer.payment), 2);
             double paymentChange = totalPayment - canSelection.Cost;
            
 
-            if (!SufficientPayment(totalPayment, canSelection))
+            if (totalPayment < canSelection.Cost)
             {
                 Interface.DisplayMessage("Insufficient money provided.  Soda will not be dispensed and funds will be returned.");
                 customer.AddToWallet(customer.payment);
@@ -171,19 +166,19 @@ namespace SodaMachine
             {
                 Interface.DisplayMessage("Insufficient soda in inventory.  Soda will not be dispensed and funds will be returned.");
                 customer.AddToWallet(customer.payment);
-
             }
             else if (paymentChange > ComputeRegisterValue())
             {
                 Interface.DisplayMessage("Insufficient change in machine.  Soda will not be dispensed and funds will be returned.");
                 customer.AddToWallet(customer.payment);
             }
-            else if (SufficientPayment(totalPayment, canSelection) && (MachineHasCan(canSelection)))
+            else if (totalPayment >= canSelection.Cost && (MachineHasCan(canSelection)))
             {
                 if (NeedsChange(totalPayment, canSelection))
                 {
                     double changeToDispense = totalPayment - canSelection.Cost;
                     DispenseSoda(canSelection);
+                    Interface.DisplayMessage($"Your change is {changeToDispense}");
                     customer.AddToWallet(ComputeChangeList(changeToDispense));
                 }
                 else
@@ -216,22 +211,10 @@ namespace SodaMachine
                 return true;
             }
         }
-        public bool SufficientPayment(Double totalPayment, Can canSelection)
-        {
-            if (totalPayment > canSelection.Cost)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         public void DispenseSoda(Can canSelection)
         {
             inventory.Remove(canSelection);
             Interface.DisplayMessage($"Successfully purchased {canSelection.Name}!");
         }
-       
     }
 }

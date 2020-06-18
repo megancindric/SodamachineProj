@@ -20,13 +20,15 @@ namespace SodaMachine
         }
 
         //member methods
+
+        //edit this method
         public void AddToWallet(List<Coin> changeList)
         {
             foreach (Coin coin in changeList)
             {
-                changeList.Remove(coin);
                 wallet.coins.Add(coin);
             }
+            changeList.Clear();
         }
         
         public void AddToPayment(Coin coinToAdd)
