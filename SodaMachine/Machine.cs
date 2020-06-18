@@ -116,36 +116,74 @@ namespace SodaMachine
             }
             return totalRegisterValue;
         }
-
-       
         public void InsertPayment(List<Coin> customerPayment)
         {
             receivedPayment = customerPayment;
         }
-        public void DispenseSoda()
+        public void DispenseSoda(Customer customer)
         {
-            //how can we translate a specific user input to a type of soda can?
+            Can canSelection = SelectSoda();
+            inventory.Remove(canSelection);
+            customer.backpack.AddCan(canSelection);
+            //could add success message here
         }
         public Can SelectSoda()
         {
             switch (Interface.GetUserInputInt("Please enter the number of your soda choice!"))
             {
                 case 1:
-                    Console.WriteLine("Cola selected.");
+                    Console.WriteLine("Cola selected.  Please insert money");
                     return cola;
                     
                 case 2:
-                    Console.WriteLine("Root Beer selected.");
+                    Console.WriteLine("Root Beer selected.  Please insert money");
                     return rootBeer;
 
                 case 3:
-                    Console.WriteLine("Orange Soda selected");
+                    Console.WriteLine("Orange Soda selected  Please insert money");
                     return orangeSoda;
 
                 default:
                     Console.WriteLine("Not a valid soda selection. Please try again!");
                     return SelectSoda();
             }
+        }
+
+        public List<Coin> ComputeChangeList(Double changeToDispense)
+        {
+            List<Coin> changeList = new List<Coin>();
+
+            while (changeToDispense > 0)
+            {
+                if (changeToDispense / 0.25 > 1)
+                {
+                    quarter = new Quarter();
+                    changeList.Add(quarter);
+                    changeToDispense -= 0.25;
+                }
+
+                else if (changeToDispense / 0.10 > 1)
+                {
+                    dime = new Dime();
+                    changeList.Add(dime);
+                    changeToDispense -= 0.10;
+                }
+
+                else if (changeToDispense / 0.05 > 1)
+                {
+                    nickel = new Nickel();
+                    changeList.Add(nickel);
+                    changeToDispense -= 0.05;
+                }
+
+                else if (changeToDispense / 0.01 > 1)
+                {
+                    penny = new Penny();
+                    changeList.Add(penny);
+                    changeToDispense -= 0.01;
+                }
+            }
+            return changeList;
         }
     }
 }

@@ -32,13 +32,31 @@ namespace SodaMachine
 
         public static void InsufficientMoney()
         {
-            Console.WriteLine("Insufficent money provided.  Soda will not be dispensed and funds will be returned to you.");
+            Console.WriteLine("Insufficent funds.  Please try again.");
         }
 
         public static void InsufficientInventory()
         {
             Console.WriteLine("Insufficient soda in inventory.  Soda will not be dispensed and funds will be returned to you.");
         }
+        public static void DisplayCoinOptions()
+        {
+            Console.WriteLine("Press 1 for Quarter");
+            Console.WriteLine("Press 2 for Dime");
+            Console.WriteLine("Press 3 for Nickel");
+            Console.WriteLine("Press 4 for Penny");
+        }
         
+        public static void DisplayPurchaseOptions()
+        {
+            Console.WriteLine("Press 1 to continue adding coins");
+            Console.WriteLine("Press 2 to insert all coins into machine");
+        }
+
+        public static void InvalidSelection()
+        {
+            Console.WriteLine("Invalid selection detected.  Please try again.");
+        }
+
     }
 }

@@ -41,19 +41,10 @@ namespace SodaMachine
             Interface.InsufficientMoney();
             ReturnPayment(sodaMachine.receivedPayment);
         }
-        public double ComputeTotalPayment(List<Coin> coinList)
-        {
-            double totalPayment = 0;
-            foreach (Coin coin in coinList)
-            {
-                totalPayment += coin.Value;
-            }
-            return totalPayment;
-        }
-
+        
         public void AssessPayment(Machine sodaMachine, Customer customer, Can canSelection)
         {
-            double totalPayment = ComputeTotalPayment(customer.payment);
+            double totalPayment = Math.ComputeTotalPayment(customer.payment);
 
             if (totalPayment < canSelection.Cost)
             {
