@@ -19,7 +19,6 @@ namespace SodaMachine
             card = new Card();
             coins = new List<Coin>();
             AddCoins();
-            DisplayWallet();
         }
         public void AddCoins()
         {
@@ -71,11 +70,8 @@ namespace SodaMachine
                     pennyCount++;
                 }
             }
-            Console.WriteLine("The current money in your wallet is:");
-            Console.WriteLine($"Quarters: {quarterCount}");
-            Console.WriteLine($"Dimes: {dimeCount}");
-            Console.WriteLine($"Nickels: {nickelCount}");
-            Console.WriteLine($"Pennies: {pennyCount}");
+            //move to interface class
+            Interface.DisplayCoinsInWallet(quarterCount, dimeCount, nickelCount, pennyCount);
         }
        
     }

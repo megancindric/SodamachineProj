@@ -17,135 +17,73 @@ namespace SodaMachine
             sodaMachine = new Machine();
             customer = new Customer();
             Interface.DisplayMessage("Welcome to the soda machine!");
-            do
-            {
-                SelectFromMenu();
-            } while (true);
+
+            SelectFromMenu();
+
+            sodaMachine.InsertPayment(customer.payment);
+            //will need to  do assesspayment method
+            //then will need to do correct response;
         }
         //member methods
-        public void AssessPayment(Machine sodaMachine, Customer customer, Can canSelection)
+        public void PurchaseASoda()
         {
-            double totalPayment = Math.ComputeTotalPayment(customer.payment);
-            double paymentChange = totalPayment - canSelection.Cost;
+            Can customerSelection = SelectSoda();
+            //Will use this can for cost & soda machine methods
+            customer.SelectPaymentOption();
+            //Now have customer payment
+            sodaMachine.AssessPayment(customer, customerSelection);
+            //Will use cost of this can w/ payment methods
 
-            if (!SufficientPayment(totalPayment, canSelection))
-            {
-                UnderPayment();
-            }
-            else if (!MachineHasCan(canSelection))
-            {
-                InsufficientInventory();
-            }
-            else if (paymentChange > sodaMachine.ComputeRegisterValue())
-            {
-                InsufficientMoneyInMachine();
-            }
-            else if (SufficientPayment(totalPayment, canSelection) && (MachineHasCan(canSelection)))
-            {
-                if (NeedsChange(totalPayment, canSelection))
-                {
-                    double changeToDispense = totalPayment - canSelection.Cost;
-                    DispenseSoda();
-                    customer.AddToWallet(sodaMachine.ComputeChangeList(changeToDispense));
-                }
-                else
-                {
-                    DispenseSoda();
-                }
-            }
-        }
-        public bool MachineHasCan(Can canSelection)
-        {
-            if (sodaMachine.inventory.Contains(canSelection))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public bool NeedsChange(Double totalPayment, Can canSelection)
-        {
-            if (totalPayment == canSelection.Cost)
-            {
-                return false;
-            }
-            else
-            { 
-                return true;
-            }
-        }
-        public bool SufficientPayment(Double totalPayment, Can canSelection)
-        {
-            if (totalPayment > canSelection.Cost)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public void DispenseSoda()
-        {
-            Can canSelection = sodaMachine.SelectSoda();
-            sodaMachine.inventory.Remove(canSelection);
-            customer.backpack.AddCan(canSelection);
-            Interface.DisplayMessage($"Successfully purchased {canSelection.Name}!");
-        }
-        public void InsufficientInventory()
-        {
-            Interface.DisplayMessage("Insufficient soda in inventory.  Soda will not be dispensed and funds will be returned.");
-            customer.AddToWallet(sodaMachine.receivedPayment);
-        }
-        public void InsufficientMoneyInMachine()
-        {
-            Interface.DisplayMessage("Insufficient change in machine.  Soda will not be dispensed and funds will be returned.");
-            customer.AddToWallet(sodaMachine.receivedPayment);
-        }
-        public void UnderPayment()
-        {
-            Interface.DisplayMessage("Insufficient money provided.  Soda will not be dispensed and funds will be returned.");
-            customer.AddToWallet(sodaMachine.receivedPayment);
+            //If successful purchase...
+            customer.backpack.AddCan(customerSelection);
         }
         public void SelectFromMenu()
         {
             Interface.DisplayMenuOptions();
             int userInput = Interface.GetUserInputInt("Please enter your number selection");
-
             switch (userInput)
             {
                 case 1:
-                    {
-                        sodaMachine.SelectSoda();
+                        PurchaseASoda();
                         break;
-                    }
                 case 2:
-                    {
                         sodaMachine.DisplayInventory();
                         SelectFromMenu();
                         break;
-                    }
                 case 3:
-                    {
                         customer.wallet.DisplayWallet();
                         SelectFromMenu();
                         break;
-                    }
-
                 case 4:
-                    {
+                        customer.backpack.DisplayBackpack();
+                        SelectFromMenu();
+                        break;
+                case 5:
                         Interface.DisplayMessage("Thanks for playing!");
                         break;
-                    }
-
                 default :
-                    {
                         Interface.InvalidSelection();
                         SelectFromMenu();
                         break;
-                    }
+            }
+        }
+        public Can SelectSoda()
+        {           
+            Interface.DisplaySodaOptions();
+            switch (Interface.GetUserInputInt("Please enter the number of your soda choice!"))
+            {
+                case 1:
+                    Interface.DisplayMessage("Cola selected.  Please insert money");
+                    return new Cola();
+                case 2:
+                    Interface.DisplayMessage("Root Beer selected.  Please insert money");
+                    return new RootBeer();
+                case 3:
+                    Interface.DisplayMessage("Orange Soda selected  Please insert money");
+                    return new OrangeSoda();
+                default:
+                    Interface.InvalidSelection();
+                    return SelectSoda();
             }
         }
     }

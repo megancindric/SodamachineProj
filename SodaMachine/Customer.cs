@@ -10,12 +10,12 @@ namespace SodaMachine
         public Wallet wallet;
         public Backpack backpack;
         public List<Coin> payment;
-
         //constructor
         public Customer()
         {
             wallet = new Wallet();
             backpack = new Backpack();
+
             payment = new List<Coin>();
         }
 
@@ -28,37 +28,40 @@ namespace SodaMachine
                 wallet.coins.Add(coin);
             }
         }
-        public void CreatePayment()
+        
+        public void AddToPayment(Coin coinToAdd)
         {
-            SelectPaymentOption();
-
-            
-        }
-        public void AddToPayment()
-        {
-            Coin coinToAdd = SelectCoin();
-            if (wallet.coins.Contains(coinToAdd))
+            if (!WalletHasCoin(coinToAdd))
+            {
+                Interface.DisplayMessage("Insufficient coins in wallet for this selection.  Please try again.");
+            }
+            else
             {
                 wallet.coins.Remove(coinToAdd);
                 payment.Add(coinToAdd);
                 Interface.DisplayMessage($"Your current total payment is: {Math.ComputeTotalPayment(payment)}");
             }
-            else
+        }
+        public bool WalletHasCoin(Coin coinToAdd)
+        {
+            foreach (Coin coin in wallet.coins)
             {
-                Interface.DisplayMessage("Insufficient coins in wallet for this selection.  Please try again.");
+                if (coin.Name == coinToAdd.Name)
+                {
+                    return true;
+                }
             }
+            return false;
         }
         public void SelectPaymentOption()
         {
             Interface.DisplayPurchaseOptions();
-            //1 to add a coin, 2 to submit payment, 3 to display wallet
-            //2 is the only case where we break and move on to submitting payment
             int userSelection = Interface.GetUserInputInt("Please enter your selection:");
             switch (userSelection)
             {
                 case 1:
                     {
-                        SelectCoin();
+                        AddToPayment(SelectCoin());
                         SelectPaymentOption();
                         break;
                     }
@@ -81,47 +84,24 @@ namespace SodaMachine
             }
         }
             public Coin SelectCoin()
-        {
-            Coin coinSelection;
-            Interface.DisplayCoinOptions();
-            int userSelection = Interface.GetUserInputInt("Please select the coin you'd like to add to your payment:");
-
-            switch (userSelection)
             {
-                case 1:
-                    {
-                        coinSelection = new Quarter();
-                        return coinSelection;
-                    }
-                    
+                Interface.DisplayCoinOptions();
+                int userSelection = Interface.GetUserInputInt("Please select the coin you'd like to add to your payment:");
 
-                case 2:
-                    {
-                        coinSelection = new Dime();
-                        return coinSelection;
-                    }
-                   
-
-                case 3:
-                    {
-                        coinSelection = new Nickel();
-                        return coinSelection;
-                    }
-                    
-
-                case 4:
-                    {
-                        coinSelection = new Penny();
-                        return coinSelection;
-                    }
-                   
-
-                default:
-                    {
-                        Interface.InvalidSelection();
-                        return SelectCoin();
-                    }      
+                 switch (userSelection)
+                 {
+                     case 1:
+                            return new Quarter();
+                     case 2:
+                            return new Dime();
+                     case 3:
+                            return new Nickel();
+                     case 4:
+                            return new Penny();
+                     default:
+                            Interface.InvalidSelection();
+                            return SelectCoin();
+                 }
             }
-        }
     }
 }

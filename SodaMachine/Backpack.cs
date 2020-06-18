@@ -20,5 +20,13 @@ namespace SodaMachine
         {
             cans.Add(soda);
         }
+
+        public void DisplayBackpack()
+        {
+            foreach(Can can in cans)
+            {
+                Interface.DisplayMessage(can.Name);
+            }
+        }
     }
 }

@@ -36,7 +36,8 @@ namespace SodaMachine
             Console.WriteLine("1. Buy a soda");
             Console.WriteLine("2. Display soda in inventory");
             Console.WriteLine("3. Display your available money");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("4. Display sodas in your backpack");
+            Console.WriteLine("5. Exit");
         }
        
         public static void DisplaySodaOptions()
@@ -55,10 +56,26 @@ namespace SodaMachine
         
         public static void DisplayPurchaseOptions()
         {
-            Console.WriteLine("Press 1 to continue adding coins");
-            Console.WriteLine("Press 2 to insert all coins into machine");
+            Console.WriteLine("Press 1 to add a coin from your wallet");
+            Console.WriteLine("Press 2 to insert your payment into the machine");
+            Console.WriteLine("Press 3 to display money in your wallet");
+            //third case display wallet
         }
-
+        public static void DisplayCoinsInWallet(int quarterCount, int dimeCount, int nickelCount, int pennyCount)
+        {
+            Console.WriteLine("The current money in your wallet is:");
+            Console.WriteLine($"Quarters: {quarterCount}");
+            Console.WriteLine($"Dimes: {dimeCount}");
+            Console.WriteLine($"Nickels: {nickelCount}");
+            Console.WriteLine($"Pennies: {pennyCount}");
+        }
+        public static void DisplaySodaInventory(int colaCount, int rootBeerCount, int orangeSodaCount)
+        {
+            Console.WriteLine("The current inventory is:");
+            Console.WriteLine($"1: {colaCount} cans of Cola.");
+            Console.WriteLine($"2. {rootBeerCount} cans of Root Beer");
+            Console.WriteLine($"3. {orangeSodaCount} cans of Orange Soda");
+        }
         public static void InvalidSelection()
         {
             Console.WriteLine("Invalid selection detected.  Please try again.");
