@@ -25,19 +25,25 @@ namespace SodaMachine
             return userInput;
         }
 
-        public static void DisplayWelcome()
+        public static void DisplayMessage(string message)
         {
-            Console.WriteLine("Welcome to the soda machine!");
+            Console.WriteLine(message);
         }
 
-        public static void InsufficientMoney()
+        public static void DisplayMenuOptions()
         {
-            Console.WriteLine("Insufficent funds.  Please try again.");
+            Console.WriteLine("Your menu options are:");
+            Console.WriteLine("1. Buy a soda");
+            Console.WriteLine("2. Display soda in inventory");
+            Console.WriteLine("3. Display your available money");
+            Console.WriteLine("4. Exit");
         }
-
-        public static void InsufficientInventory()
+       
+        public static void DisplaySodaOptions()
         {
-            Console.WriteLine("Insufficient soda in inventory.  Soda will not be dispensed and funds will be returned to you.");
+            Console.WriteLine($"Press 1 for Cola ($0.35 per can)");
+            Console.WriteLine($"Press 2 for Root Beer ($0.60 per can)");
+            Console.WriteLine($"Press 3 for Orange Soda ($0.06 per can");
         }
         public static void DisplayCoinOptions()
         {

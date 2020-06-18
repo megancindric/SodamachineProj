@@ -17,15 +17,12 @@ namespace SodaMachine
             sodaMachine = new Machine();
             customer = new Customer();
             Interface.DisplayMessage("Welcome to the soda machine!");
-            sodaMachine.DisplayInventory();
-            Can canSelection = sodaMachine.SelectSoda();
-            //Method for customer to add money to payment
-            AssessPayment(sodaMachine, customer, canSelection);
+            do
+            {
+                SelectFromMenu();
+            } while (true);
         }
-
         //member methods
-        
-
         public void AssessPayment(Machine sodaMachine, Customer customer, Can canSelection)
         {
             double totalPayment = Math.ComputeTotalPayment(customer.payment);

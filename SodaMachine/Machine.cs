@@ -10,6 +10,7 @@ namespace SodaMachine
         public List<Coin> register;
         public List<Can> inventory;
         public List<Coin> receivedPayment;
+        public Can customerSodaSelection;
 
         Quarter quarter;
         Dime dime;
@@ -27,6 +28,7 @@ namespace SodaMachine
             InitializeInventory();
             register = new List<Coin>();
             InitializeRegister();
+
             receivedPayment = new List<Coin>();
         }
         public void InitializeInventory()
@@ -75,8 +77,6 @@ namespace SodaMachine
         }
 
         //member methods   
-
-       
         public void DisplayInventory()
         {
             int colaCount = 0;
@@ -97,10 +97,7 @@ namespace SodaMachine
                     orangeSodaCount++;
                 }
             }
-            Interface.DisplayMessage("The current inventory is:");
-            Interface.DisplayMessage($"1: {colaCount} cans of Cola.");
-            Interface.DisplayMessage($"2. {rootBeerCount} cans of Root Beer");
-            Interface.DisplayMessage($"3. {orangeSodaCount} cans of Orange Soda");
+            Interface.DisplaySodaInventory(colaCount, rootBeerCount, orangeSodaCount);
         }
         public double ComputeRegisterValue()
         {
@@ -113,6 +110,7 @@ namespace SodaMachine
         }
         public void InsertPayment(List<Coin> customerPayment)
         {
+            //may be able to delete this and direct reference receivedPayment
             receivedPayment = customerPayment;
         }
         public void AddPayment(List<Coin> receivedPayment)
@@ -122,29 +120,6 @@ namespace SodaMachine
                 register.Add(coin);
             }
         }
-        
-        public Can SelectSoda()
-        {
-            Interface.DisplaySodaOptions();
-            switch (Interface.GetUserInputInt("Please enter the number of your soda choice!"))
-            {
-                case 1:
-                    Interface.DisplayMessage("Cola selected.  Please insert money");
-                    return cola;
-                    
-                case 2:
-                    Interface.DisplayMessage("Root Beer selected.  Please insert money");
-                    return rootBeer;
-
-                case 3:
-                    Interface.DisplayMessage("Orange Soda selected  Please insert money");
-                    return orangeSoda;
-
-                default:
-                    Interface.InvalidSelection();
-                    return SelectSoda();
-            }
-        }
 
         public List<Coin> ComputeChangeList(Double changeToDispense)
         {
@@ -152,6 +127,7 @@ namespace SodaMachine
 
             while (changeToDispense > 0)
             {
+                //Check if divisible by 5 -> if % 5 != 0 --> take that number, see if it's greater than 
                 if ((changeToDispense / 0.25 > 1) && (register.Contains(quarter)))
                 {
                     register.Remove(quarter);
@@ -178,6 +154,93 @@ namespace SodaMachine
                 }
             }
             return changeList;
+        }
+        public void AssessPayment(Customer customer, Can canSelection)
+        {
+            //move Math.ComputeTotalPayment to separate area --> let's first pass it to machine, then 
+            double totalPayment = Math.ComputeTotalPayment(customer.payment);
+            double paymentChange = totalPayment - canSelection.Cost;
+
+            if (!SufficientPayment(totalPayment, canSelection))
+            {
+                UnderPayment();
+            }
+            else if (!MachineHasCan(canSelection))
+            {
+                InsufficientInventory();
+            }
+            else if (paymentChange > ComputeRegisterValue())
+            {
+                InsufficientMoneyInMachine();
+            }
+            else if (SufficientPayment(totalPayment, canSelection) && (MachineHasCan(canSelection)))
+            {
+                if (NeedsChange(totalPayment, canSelection))
+                {
+                    double changeToDispense = totalPayment - canSelection.Cost;
+                    DispenseSoda(canSelection);
+                    customer.AddToWallet(ComputeChangeList(changeToDispense));
+                }
+                else
+                {
+                    DispenseSoda(canSelection);
+                }
+            }
+        }
+        public bool MachineHasCan(Can canSelection)
+        {
+            if (inventory.Contains(canSelection))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool NeedsChange(Double totalPayment, Can canSelection)
+        {
+            if (totalPayment == canSelection.Cost)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public bool SufficientPayment(Double totalPayment, Can canSelection)
+        {
+            if (totalPayment > canSelection.Cost)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void DispenseSoda(Can canSelection)
+        {
+            inventory.Remove(canSelection);
+            //move this below method to separate spot
+            customer.backpack.AddCan(canSelection);
+            Interface.DisplayMessage($"Successfully purchased {canSelection.Name}!");
+        }
+        public void InsufficientInventory()
+        {
+            Interface.DisplayMessage("Insufficient soda in inventory.  Soda will not be dispensed and funds will be returned.");
+            customer.AddToWallet(receivedPayment);
+        }
+        public void InsufficientMoneyInMachine()
+        {
+            Interface.DisplayMessage("Insufficient change in machine.  Soda will not be dispensed and funds will be returned.");
+            customer.AddToWallet(receivedPayment);
+        }
+        public void UnderPayment()
+        {
+            Interface.DisplayMessage("Insufficient money provided.  Soda will not be dispensed and funds will be returned.");
+            customer.AddToWallet(receivedPayment);
         }
     }
 }
