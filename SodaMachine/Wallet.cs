@@ -70,7 +70,6 @@ namespace SodaMachine
                     pennyCount++;
                 }
             }
-            //move to interface class
             Interface.DisplayCoinsInWallet(quarterCount, dimeCount, nickelCount, pennyCount);
         }
        

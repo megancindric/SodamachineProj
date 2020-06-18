@@ -41,7 +41,7 @@ namespace SodaMachine
             {
                 wallet.coins.Remove(coinToAdd);
                 payment.Add(coinToAdd);
-                Interface.DisplayMessage($"Your current total payment is: {Math.ComputeTotalPayment(payment)}");
+                Interface.DisplayMessage($"Your current total payment is: {Computations.ComputeTotalPayment(payment)}");
             }
         }
         public bool WalletHasCoin(Coin coinToAdd)

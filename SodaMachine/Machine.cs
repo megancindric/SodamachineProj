@@ -123,26 +123,27 @@ namespace SodaMachine
 
             while (changeToDispense > 0)
             {
+                changeToDispense = Math.Round(changeToDispense, 2);
                 //Check if divisible by 5 -> if % 5 != 0 --> take that number, see if it's greater than 
-                if ((changeToDispense / 0.25 > 1) && (register.Contains(quarter)))
+                if ((changeToDispense / 0.25 >= 1) && (register.Contains(quarter)))
                 {
                     register.Remove(quarter);
                     changeList.Add(quarter);
                     changeToDispense -= 0.25;
                 }
-                else if ((changeToDispense / 0.10 > 1) && (register.Contains(dime)))
+                else if ((changeToDispense / 0.10 >= 1) && (register.Contains(dime)))
                 {
                     register.Remove(dime);
                     changeList.Add(dime);
                     changeToDispense -= 0.10;
                 }
-                else if ((changeToDispense / 0.05 > 1) && (register.Contains(nickel)))
+                else if ((changeToDispense / 0.05 >= 1) && (register.Contains(nickel)))
                 {
                     register.Remove(nickel);
                     changeList.Add(nickel);
                     changeToDispense -= 0.05;
                 }
-                else if ((changeToDispense / 0.01 > 1) && (register.Contains(penny)))
+                else if ((changeToDispense / 0.01 >= 1) && (register.Contains(penny)))
                 {
                     register.Remove(penny);
                     changeList.Add(penny);
@@ -156,7 +157,6 @@ namespace SodaMachine
             double totalPayment = Math.Round(Computations.ComputeTotalPayment(customer.payment), 2);
             double paymentChange = totalPayment - canSelection.Cost;
            
-
             if (totalPayment < canSelection.Cost)
             {
                 Interface.DisplayMessage("Insufficient money provided.  Soda will not be dispensed and funds will be returned.");
@@ -176,9 +176,10 @@ namespace SodaMachine
             {
                 if (NeedsChange(totalPayment, canSelection))
                 {
-                    double changeToDispense = totalPayment - canSelection.Cost;
+                    double changeToDispense = Math.Round(totalPayment - canSelection.Cost, 2);
                     DispenseSoda(canSelection);
                     Interface.DisplayMessage($"Your change is {changeToDispense}");
+                    customer.backpack.AddCan(canSelection);
                     customer.AddToWallet(ComputeChangeList(changeToDispense));
                 }
                 else
